@@ -1,5 +1,5 @@
-KMOD= keylog	#Name of KLD to build
-SRCS= keylog.c	#List of SRC Files
+KMOD=incognito 	#Name of KLD to build
+SRCS= rootkit.c	#List of SRC Files
 
 WERROR= 
 

