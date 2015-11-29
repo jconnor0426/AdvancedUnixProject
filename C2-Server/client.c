@@ -62,7 +62,7 @@ void send_file(struct socket *sock)
 	}
 	else
 	{
-		File *fp = fopen ("key.txt", "r");
+		File *fp = fopen ("key.log", "r");
 		while (!feof(fp))
 		{
 			fread (buffer, sizeof(char), BUFFER_SIZE, fp);
